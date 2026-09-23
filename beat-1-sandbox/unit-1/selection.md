@@ -1,3 +1,27 @@
+# Unit 1 — Issue Selection
+
+Path: `beat-1-sandbox/unit-1/selection.md`
+
+Record of the issue carried into Unit 2, and of the evaluation runs that produced
+`eval-run.txt`. This file is graded at the path above; a copy kept anywhere else in
+the repository is not read.
+
+Complete every labelled field below. Each is graded on its own; content placed under the
+wrong label is not graded.
+
+---
+
+## Selected issue
+
+**Issue link**
+
+https://github.com/codepath/pathreview-ai301-fa26-s1/issues/72
+
+**Verdict output**
+
+**The verdict must record `accept` for this issue.**
+
+````
 Skill(issue-select)
 Successfully loaded skill
 
@@ -42,7 +66,7 @@ I have all the evidence. Let me compile the grades for each issue.
 ---
 Grading Summary
 
-Repo health (applies to all three): Most recent commit Sep 16, 2026 (7 days ago) → maintainer_alive ✅ | repo_in_use ✅. Policy: docs/CONTRIBUTING.md is silent on AI-generated contributions ✅.
+Repo health (applies to all three): Most recent commit Sep 16, 2026 (7 days ago) → maintainer_alive OK | repo_in_use OK. Policy: docs/CONTRIBUTING.md is silent on AI-generated contributions OK.
 
 ---
 Issue #73 — README and .env.example disagree about which LLM API key to set
@@ -83,8 +107,8 @@ Fit ranking (all three accepted)
 Your profile: wants Python practice, avoid complexity
 
 1. #72 (top pick) — Python exception handling in core/security.py, one file to change plus one test marker to remove. Builds Python skills with minimal risk of getting stuck.
-2. #73 — Pure docs fix (README + .env.example), 1–2 hrs, easiest possible first touch but least Python practice.
-3. #69 — Python output-parser bug, 2–4 hrs. Good Python practice but meaningfully more work and the RAG pipeline adds conceptual overhead.
+2. #73 — Pure docs fix (README + .env.example), 1-2 hrs, easiest possible first touch but least Python practice.
+3. #69 — Python output-parser bug, 2-4 hrs. Good Python practice but meaningfully more work and the RAG pipeline adds conceptual overhead.
 
 [
   {
@@ -121,3 +145,43 @@ Your profile: wants Python practice, avoid complexity
     "verdict": "accept"
   }
 ]
+````
+
+---
+
+## Eval iterations
+
+**Run history**
+
+1. Smoke run (--limit 3): 2/3 agreement
+2. First full run (--save-run): 14/20 (category floor unmet — no match in `policy`)
+3. After adding `contribution_policy` check + rewording `scope_fits_newcomer` (--only issue-01,04,06,12,15,19): 2/6
+4. After refining `scope_fits_newcomer` again (--only issue-01,04,19,10,15): 4/5
+5. Final full run (--save-run, committed as eval-run.txt): 17/20 — category floor met in all 5 categories, one below the 18/20 bar (issue-14 and issue-19 failed `maintainer_alive`; manual date-check confirmed both commits are well within the 30-day window, so this looks like a model misread rather than a rubric flaw)
+
+**Issue analysis**
+
+issue-15 (zulip/zulip#19589): gold label is `reject`, my rubric graded `accept`. The issue proposes separating Slack-webhook `command`/`text` fields — one coherent feature, but its 97-comment thread (open since 2021, multiple contributors claimed and abandoned it) shows the design was never settled by a maintainer. My `scope_fits_newcomer` check, after I broadened it to stop rejecting legitimate multi-part single-task issues, no longer reliably caught this "long-unsettled design" pattern.
+
+**Check rationale**
+
+`scope_fits_newcomer`: "The issue targets one cohesive outcome. It still passes when reaching that outcome needs several related edits, checklist items, or named examples... It fails only when: (a) the issue is an explicit tracking list of several unrelated GitHub issue numbers or separate feature requests meant to be claimed independently, or (b) the thread shows the design is still being actively debated with no maintainer decision." I wrote it this way after my first version wrongly rejected 3 valid issues (issue-01, issue-04, issue-19) for having multiple related parts under one task.
+
+**Trade-offs**
+
+Broadening clause (b) to allow multi-part-but-single-task issues traded false rejects for a false accept: it fixed issue-01, issue-04, and issue-19, but let issue-15 slip through, since its "still debated" signal is buried in a 97-comment thread rather than stated plainly. A version of (b) that weighs debate length/inconclusiveness, not just presence, would likely catch issue-15 without losing the other three — I didn't have time/budget to test that iteration.
+
+---
+
+## Selection rationale
+
+**Selection rationale**
+
+1. #72 is a bounded Python exception-handling fix (~1-2 hrs), matching my interest in practicing Python and my preference to avoid complex issues, and it fit the time I had tonight.
+2. The verdict correctly confirmed no claims/assignees, an active maintainer, and a silent AI policy. Beyond the rubric, I weighed that #72 gives more Python practice than #73 (pure docs) without the added RAG-pipeline complexity of #69.
+3. Low difficulty: a single-file fix in `core/security.py` plus removing one `@pytest.mark.xfail` marker, no competing claims or linked PRs to navigate.
+
+---
+
+Related paths: `eval-run.txt` in this directory; your skill's files in
+`tools/issue-select/`.
